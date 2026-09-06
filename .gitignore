@@ -12,6 +12,9 @@ dist
 dist-ssr
 *.local
 
+# M0 PoC probe worktree (never committed)
+.temp/
+
 # Cargo workspace build output
 /target/
 

@@ -11,7 +11,7 @@ VRCX-K/
 │   └── tauri.conf.json   窗口/打包配置
 ├── src/           ← 脸 · React UI (Vite 19)
 ├── host/          ← 大脑 · Cordis (bun) 宿主（业务/插件/服务）
-├── docs/          ← architecture-proposal.md (v4.2) + vrcxk-arch-final.html（架构图）
+├── docs/          ← architecture-proposal.md (v4.2) + poc-m0.md（M0 PoC 报告）+ vrcxk-arch-final.html（架构图）
 ├── Cargo.toml     ← cargo workspace 根（成员 src-tauri）
 ├── package.json   ← bun workspace 根（含 host）
 └── runtime-research.md / ecosystem-research.md（支撑调研）
@@ -35,7 +35,7 @@ VRCX-K/
 | `cargo tauri dev` | **完整开发**：自动起前端 vite + 编译 Rust 壳 + 弹窗口 |
 | `cargo tauri build` | **完整打包**：前端 build → Rust release → 安装包（exe/msi） |
 
-> `cargo tauri dev/build` 会自动调 `bun run build`（前端），是"壳+前端"的一条指令入口。注意：**尚不含 host（Cordis）**——host 接入链路是 M0 之后的事。
+> `cargo tauri dev/build` 会自动调 `bun run build`（前端），是"壳+前端"的一条指令入口。注意：**尚不含 host（Cordis）**——host 接入链路是 M1 的事（M0 只验机制，未接壳）。
 
 ### JS / Bun 侧
 | 命令 | 作用 |
@@ -57,7 +57,19 @@ VRCX-K/
 - 本地工具状态目录 `.agent-teams/` `.dsh/` `.mnemon/` `.opencode/` 通过 `.git/info/exclude` 忽略（**不提交、每台机器各自有**），勿加入 .gitignore（那会随仓库共享）。
 - `.gitignore` 只放通用忽略（node_modules/dist//target/ 等）。
 
+## 临时工作区（agent 专用）
+- `.temp/`（已 gitignore，**不提交**）是 agent 的临时工作区：探针脚本、临时构建产物、中间实验都放这里，做完即弃，可随时整目录删除。仓库内任何**不打算进 git** 的实验性文件优先放 `.temp/`，别散落在根目录。
+- 区分：`.temp/` 是仓库内临时区（随仓库存在但 gitignore）；`.agent-teams/` 等是每机工具状态（`.git/info/exclude`，各机器私有）。
+- **要保留**的产物（报告/正式代码/文档）放正常位置（docs/、host/、src/…），不要留在 `.temp/` 里"假装提交"——临时区的东西一旦需要转正，就移出 `.temp/` 再提交。
+
 ## 状态
 - ✅ 架构方案定稿（docs/，5 轮评审通过）
 - ✅ 项目骨架（三层结构 + cargo/bun workspace）
-- ⏳ M0 PoC：bun 跑 Cordis + loader + `bun compile` 动态 import 外置插件目录验证（TODO 见架构文档 §4.1/§4.5）
+- ✅ **M0 PoC 完成**（报告 `docs/poc-m0.md`）：
+  - bun 1.4.2 跑 Cordis(rc.9)+loader(rc.6)+include(1.0.5)：L1 启停/配置热 ✅、L2 窗口期降级（插件级重启，清 require.cache 同 URL 重求值）✅
+  - **分发形态定案：宿主骨架 compile + 插件外置目录运行时加载**——compile 产物须**静态 import 宿主依赖**（含 include），插件用**绝对 file URL** 动态 import；宿主依赖勿经 `ctx.loader.create` 字符串名动态加载（compile 打不进 bundle）
+  - kkrpc/ws 脸⇄脑双向链路 ✅（D-6 ws 通道实证；stdio 双向桥属 M1）
+  - Node 24.12 备降 spot check ✅（同代码跑通；`--expose-internals` 下 loader.internal=true，L2 HMR 可用）
+  - 上游复核：bun#35690 仍 DRAFT 未合、cordis#85 未合 → 窗口期维持，bun 主线 + 插件级重启
+- ⏳ M1：壳与生命周期（Tauri sidecar spawn/supervise + 51 重启 + stdio 双向桥 + watcher 宿主骨架）
+- 锁定版本组合：**bun 1.4.2 + cordis 4.0.0-rc.9 + loader 1.0.0-rc.6 + include 1.0.5 + kkrpc 2.1.0**（源态与 compile 态均已实证）
