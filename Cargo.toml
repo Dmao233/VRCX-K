@@ -1,0 +1,14 @@
+[workspace]
+members = ["src-tauri"]
+resolver = "2"
+
+# Shared Cargo settings for the whole VRCX-K repo.
+# `src-tauri/` is the Tauri (Rust) shell — part of the root workspace so
+# cargo commands run from the repo root operate on it uniformly.
+
+[profile.release]
+codegen-units = 1
+lto = true
+opt-level = 3
+panic = "abort"
+strip = true
