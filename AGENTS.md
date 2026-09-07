@@ -80,4 +80,11 @@ VRCX-K/
   - Node 24.12 备降 spot check ✅（同代码跑通；`--expose-internals` 下 loader.internal=true，L2 HMR 可用）
   - 上游复核：bun#35690 仍 DRAFT 未合、cordis#85 未合 → 窗口期维持，bun 主线 + 插件级重启
 - ⏳ M1：壳与生命周期（Tauri sidecar spawn/supervise + 51 重启 + stdio 双向桥 + watcher 宿主骨架）
+- 🏗 **M1 骨架已搭（2026-09，未提交）**：
+  - `src-tauri/`：Cargo.toml 依赖齐（tauri `tray-icon` feature + single-instance 2.4.4 / global-shortcut 2.3.2 / dialog 2.7.3 / notification 2.4 / opener；Windows 专属 `tauri-winrt-notification` 0.8 已就位待 F3）+ `src/{lib.rs 装配, tray.rs 托盘, notify.rs 通知薄层}`，cargo check ✅ 绿
+  - `host/`：index.ts 结构化（lifecycle 雏形：退出码 51 常量、stdin "stop" 优雅停机、SIGTERM 处理、日志走 stderr 保 stdout 干净），启动冒烟 ✅
+  - `src/`：加 `sonner` 2.0.8（应用内 toast，M1-5 接入）
+- **通知分层定稿（2026-09，避免桌面锁死 + 移动对齐）**：L0 应用内弹窗=脸 React sonner（跨平台一致）；L1 原生系统通知=手 Rust 壳——官方 `tauri-plugin-notification` 2.4 打底（跨平台含移动，装态 AUMID 正确）+ `tauri-winrt-notification` 0.8 做 Windows 深度（按钮/hero，**依赖已备、F3 真用时才编码**）；L2/L3 移动推送+服务器=**独立架构立项，现在不写认知架构**（壳层只备 Tauri 跨平台插件，将来移动端不返工）
+- **D1 探针结论（M1-4 关键，见 .temp/D1-findings.md）**：crates.io `kkrpc` Rust crate 0.6.1 是 **JSON-mode 协议**（`{method,args,type,version:"json"}`），与 npm kkrpc 2.1.0 的 **compact 协议**（`{t:"q",op,p,a}`）**不互通**（实测 Rust Client 全 HANG；手写 compact 帧全通）。GitHub main 的 interop/rust 已改 compact 但未发版 → **M1-4 自研 ~100 行 compact 端点**（官方 skill 算法），不依赖 crates.io crate，等官方发版后可换
+- **E′ 探针（M1-4 桥形态定稿，.temp/d1probe/src/bin/e2.rs 全绿）**：Rust 不自研完整 Client，做"轻量喊话"——读循环分发 `q`(服务 host)+`cb`(回调表)，忽略 `r`；**Rust→host 即时信号=裸写 compact 命令帧**（host 事件驱动读循环立即执行，零轮询）；要返回值=带 kkrpc 回调参数→host `t:cb` 回推（实测 612µs）；回调值须 unwrap value-envelope（官方 interop skill 规则）
 - 锁定版本组合：**bun 1.4.2 + cordis 4.0.0-rc.9 + loader 1.0.0-rc.6 + include 1.0.5 + kkrpc 2.1.0**（源态与 compile 态均已实证）
