@@ -5,6 +5,7 @@ import Include from "@cordisjs/plugin-include"
 import Loader from "@cordisjs/plugin-loader"
 import { HOST_VERSION } from "./api"
 import { log } from "./log"
+import { connectShellStdio } from "./stdio"
 import { listenHostWs } from "./ws"
 
 export const EXIT_RESTART = 51
@@ -23,19 +24,14 @@ async function bootstrap() {
 
   const ready = await listenHostWs(ctx)
   log(`ready ${JSON.stringify({ ...ready, version: HOST_VERSION })}`)
+
+  if (process.env.VRCXK_SHELL === "1") {
+    const shell = connectShellStdio()
+    await shell.ready(ready)
+  }
 }
 
 let stopping = false
-process.stdin?.resume()
-// TODO(M1-4): kkrpc/stdio 桥接管 stdin 后此处理移至桥内
-process.stdin?.on("data", (chunk) => {
-  const line = chunk.toString().trim()
-  if (line === "stop" && !stopping) {
-    stopping = true
-    log("stop requested via stdin — exiting 0")
-    process.exit(0)
-  }
-})
 
 process.on("SIGTERM", () => {
   if (stopping) return

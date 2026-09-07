@@ -100,16 +100,15 @@ test("wrong cwd cannot assemble cordis.yml and exits non-zero", async () => {
   proc = undefined
 })
 
-test("stdin stop exits 0 after ready", async () => {
+test("SIGTERM exits 0 after ready", async () => {
   proc = Bun.spawn(["bun", "src/index.ts"], {
     cwd: hostDir,
-    stdin: "pipe",
+    stdin: "ignore",
     stdout: "pipe",
     stderr: "pipe",
   })
   await readReady(proc.stderr)
-  proc.stdin.write("stop\n")
-  proc.stdin.end()
+  proc.kill("SIGTERM")
   expect(await proc.exited).toBe(0)
   proc = undefined
 })
