@@ -31,6 +31,8 @@
         "@cordisjs/plugin-include": "1.0.5",
         "@cordisjs/plugin-loader": "1.0.0-rc.6",
         "cordis": "4.0.0-rc.9",
+        "kkrpc": "2.1.0",
+        "ws": "^8.21.3",
       },
     },
   },
