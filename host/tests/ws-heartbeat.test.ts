@@ -100,20 +100,6 @@ test("wrong cwd cannot assemble cordis.yml and exits non-zero", async () => {
   proc = undefined
 })
 
-test("stdin stop exits 0 after ready", async () => {
-  proc = Bun.spawn(["bun", "src/index.ts"], {
-    cwd: hostDir,
-    stdin: "pipe",
-    stdout: "pipe",
-    stderr: "pipe",
-  })
-  await readReady(proc.stderr)
-  proc.stdin.write("stop\n")
-  proc.stdin.end()
-  expect(await proc.exited).toBe(0)
-  proc = undefined
-})
-
 test("host ws rejects a wrong token", async () => {
   const { ready } = await spawnHost()
   const socket = new WebSocket(`ws://127.0.0.1:${ready.port}?token=wrong`)

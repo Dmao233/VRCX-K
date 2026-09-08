@@ -31,6 +31,9 @@ serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 log = "0.4"
 
+[target.'cfg(unix)'.dependencies]
+libc = "0.2"
+
 # Windows-deep toast (AUMID/icon/hero/buttons) — tauri-apps official fork of
 # winrt-notification. Provisioned now so F3 depth lands without touching the
 # shell's notification layer; actually used from F3 onward.

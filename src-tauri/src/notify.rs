@@ -15,6 +15,7 @@ use tauri::{AppHandle, Emitter};
 
 /// Send a simple cross-platform notification through the official plugin.
 /// Safe to call from anywhere we hold an AppHandle.
+#[allow(dead_code)]
 pub fn notify_simple(
     app: &AppHandle,
     title: &str,
@@ -41,10 +42,10 @@ pub fn notify_windows_deep(_app: &AppHandle, _title: &str, _body: &str) -> tauri
 
 /// Emit a Tauri event to the frontend (e.g. "notify" so the face can show an
 /// in-app toast via sonner as well, when the host wants both channels).
+#[allow(dead_code)]
 pub fn emit_to_frontend(app: &AppHandle, title: &str, body: &str) -> tauri::Result<()> {
     app.emit(
         "notify",
         serde_json::json!({ "title": title, "body": body }),
     )
-    .map_err(Into::into)
 }
