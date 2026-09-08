@@ -33,6 +33,7 @@ async function bootstrap() {
 
 let stopping = false
 
+// SIGTERM is Unix-only; Windows graceful shutdown goes through stdio stop RPC.
 process.on("SIGTERM", () => {
   if (stopping) return
   stopping = true
