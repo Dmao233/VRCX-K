@@ -5,18 +5,37 @@
     "": {
       "name": "@vrcx-k/host",
       "dependencies": {
+        "@cordisjs/plugin-include": "1.0.5",
         "@cordisjs/plugin-loader": "1.0.0-rc.6",
         "cordis": "4.0.0-rc.9",
+        "kkrpc": "2.1.0",
+        "ws": "^8.21.3",
       },
     },
   },
   "packages": {
+    "@cordisjs/plugin-include": ["@cordisjs/plugin-include@1.0.5", "", { "dependencies": { "cosmokit": "^1.8.1", "js-yaml": "^4.1.0" }, "peerDependencies": { "@cordisjs/plugin-loader": "^1.0.0-rc.6", "cordis": "^4.0.0-rc.9" } }, "sha512-s4qNgQhHQpOL90sKppxSZBkJIjkzL9Ul/pp/vzAdapOoV6laVvC8INren6gHkJIJzVopgLSpFdUChyqQYgptAw=="],
+
     "@cordisjs/plugin-loader": ["@cordisjs/plugin-loader@1.0.0-rc.6", "", { "dependencies": { "cosmokit": "^1.8.1" }, "peerDependencies": { "cordis": "^4.0.0-rc.9", "node-addon-require-builtin": "^0.1.0" }, "optionalPeers": ["node-addon-require-builtin"] }, "sha512-WVdhzzoHr7YsotBZobhYsohSkviE/y2gHsC18gNGjv0amdwSCjGEdEsQrUcyjKc0CusAdsxjp2U3sprjb5xFDw=="],
 
     "@standard-schema/spec": ["@standard-schema/spec@1.1.0", "", {}, "sha512-l2aFy5jALhniG5HgqrD6jXLi/rUWrKvqN/qJx6yoJsgKhblVd+iqqU4RCXavm/jPityDo5TCvKMnpjKnOriy0w=="],
 
+    "argparse": ["argparse@2.0.1", "", {}, "sha512-8+9WqebbFzpX9OR+Wa6O29asIogeRMzcGtAINdpMHHyAg10f05aSFVBbcEqGf/PXw1EjAZ+q2/bEBg3DvurK3Q=="],
+
+    "copy-anything": ["copy-anything@4.1.0", "", {}, "sha512-ufbM3smX/Jbnpk5wcQjzd1MgBpzmqfNETUAyZNrGwU9foRlyHoGzMMBBCRzEhQLBjZfFDE1W2ufPXX2vdWkV8Q=="],
+
     "cordis": ["cordis@4.0.0-rc.9", "", { "dependencies": { "@standard-schema/spec": "^1.1.0", "cosmokit": "^1.8.1" }, "peerDependencies": { "@cordisjs/plugin-include": "^1.0.5", "@cordisjs/plugin-loader": "^1.0.0-rc.6" }, "optionalPeers": ["@cordisjs/plugin-include", "@cordisjs/plugin-loader"], "bin": "bin.js" }, "sha512-Y18SoewBvJ0eTZK7lHSQ5xl5YT1OWwoqFI92UrtpSAZyjUcW7cIEAOgOBVFp7PtO605vx6gBWdiOVaxY6UmSGw=="],
 
     "cosmokit": ["cosmokit@1.8.1", "", {}, "sha512-PDBv4l90xZKrUsZ0vtoycgZpO/j4iFsqJXrAxsyBDsnQRI7ZMJXIjgDJsKNjd5L8jnVnnlrDCdhkFbTncgCVjQ=="],
+
+    "js-yaml": ["js-yaml@4.3.2", "", { "dependencies": { "argparse": "^2.0.1" }, "bin": { "js-yaml": "bin/js-yaml.js" } }, "sha512-SFNOvSJ+Dgf/9An904Yx+CgSlIPCkIpao4qo51lpee25TIRejdH3rhR4EZMGoNx3/TP3O+wzWuiTFl4sqbltzA=="],
+
+    "kkrpc": ["kkrpc@2.1.0", "", { "dependencies": { "superjson": "^2.2.2" }, "peerDependencies": { "@nats-io/transport-node": "^3.3.0", "@tauri-apps/plugin-shell": "^2.2.0", "amqplib": "^0.10.9", "elysia": "^1.0.0", "hono": "^4.10.4", "ioredis": "^5.0.0", "kafkajs": "^2.2.4", "socket.io": "^4.0.0", "socket.io-client": "^4.0.0", "typescript": "^5.0.0 || ^6.0.0", "ws": "^8.18.0" }, "optionalPeers": ["@nats-io/transport-node", "@tauri-apps/plugin-shell", "amqplib", "elysia", "hono", "ioredis", "kafkajs", "socket.io", "socket.io-client", "ws"] }, "sha512-ijiqw6g83paCFtwN9vjp093F4VUKuq5PT6C9VoCgRqlUGefCYR1LIVzC+4MNodB+sXfjO9z3cM4aeC2QDYIFGQ=="],
+
+    "superjson": ["superjson@2.2.6", "", { "dependencies": { "copy-anything": "^4" } }, "sha512-H+ue8Zo4vJmV2nRjpx86P35lzwDT3nItnIsocgumgr0hHMQ+ZGq5vrERg9kJBo5AWGmxZDhzDo+WVIJqkB0cGA=="],
+
+    "typescript": ["typescript@6.0.3", "", { "bin": { "tsc": "bin/tsc", "tsserver": "bin/tsserver" } }, "sha512-y2TvuxSZPDyQakkFRPZHKFm+KKVqIisdg9/CZwm9ftvKXLP8NRWj38/ODjNbr43SsoXqNuAisEf1GdCxqWcdBw=="],
+
+    "ws": ["ws@8.21.3", "", { "peerDependencies": { "bufferutil": "^4.0.1", "utf-8-validate": ">=5.0.2" }, "optionalPeers": ["bufferutil", "utf-8-validate"] }, "sha512-201TZ/kPWxoPr/OKWjquZR1SWKXcvxdH+e1xrx89b3YbmzLMFCLfnaG1HFIgWzJOEWZ7MvpK++odZufgYR50Rw=="],
   }
 }
