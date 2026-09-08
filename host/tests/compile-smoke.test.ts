@@ -1,15 +1,23 @@
-import { afterEach, expect, test } from "bun:test"
+import { afterAll, afterEach, expect, test } from "bun:test"
+import { unlink } from "node:fs/promises"
 import { join } from "node:path"
 import { HOST_VERSION } from "../src/api"
 
 const hostDir = join(import.meta.dir, "..")
-const outfile = join(hostDir, "dist/host-compile-smoke")
+const outfile = join(
+  hostDir,
+  process.platform === "win32" ? "dist/host-compile-smoke.exe" : "dist/host-compile-smoke",
+)
 
 let proc: ReturnType<typeof Bun.spawn> | undefined
 
 afterEach(() => {
   proc?.kill()
   proc = undefined
+})
+
+afterAll(async () => {
+  await unlink(outfile).catch(() => {})
 })
 
 async function readReady(stderr: ReadableStream<Uint8Array>) {

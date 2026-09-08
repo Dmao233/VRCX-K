@@ -27,6 +27,7 @@ async function bootstrap() {
 
 let stopping = false
 process.stdin?.resume()
+// TODO(M1-4): kkrpc/stdio 桥接管 stdin 后此处理移至桥内
 process.stdin?.on("data", (chunk) => {
   const line = chunk.toString().trim()
   if (line === "stop" && !stopping) {
